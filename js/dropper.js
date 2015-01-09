@@ -76,9 +76,14 @@
         if (allowedTypes[file.type] !== true) {
             success = false;
         } else {
+            var text;
             var bin = this.result;
             var fileInfo = bin.split(',');
-            var text = atob(fileInfo[fileInfo.length - 1]);
+            if (fileInfo[0].indexOf('base64') >= 0) {
+                text = atob(fileInfo[fileInfo.length - 1]);
+            } else {
+               text = decodeURI(fileInfo[fileInfo.length - 1]);
+            }
             resultTabulator.addText(text, file.name, groupName);
             success = true;
         }
