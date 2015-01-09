@@ -10,21 +10,19 @@ var Tabulator = (function() {
 
         this.increment = function(group, count) {
             // Overall count
-            if (count === undefined) {
-                count = 1;
-            }
             this.count += count;
 
             // Group count
             if (this.counts[group] === undefined) {
                 this.numGroups++;
                 this.counts[group] = count;
+            } else {
+                this.counts[group] += count;
             }
-            this.counts[group] += count;
         }
 
         this.toString = function() {
-            return this.group + "[" + this.count.toString() + "] " + this.word;
+            return "[" + this.count.toString() + "] " + this.word;
         }
 
         this.getCounts = function() {
@@ -118,7 +116,7 @@ var Tabulator = (function() {
             // Debug output, if needed
             if (this.verbose) {
                 console.log("=================== properNouns: ===================");
-                console.log("properNounCount: " + this.properNounCount);
+                console.log("properNounCount: " + this.wordInfos.length);
                 for (var i = 0, imax = this.wordInfos.length; i < imax; ++i) {
                     console.log(this.wordInfos[i].toString());
                 }
