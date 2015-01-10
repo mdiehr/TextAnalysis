@@ -13,6 +13,7 @@
     var resultsContainer = document.getElementById('results-container');
     var filesList = document.getElementById('files-body');
     var resultsList = document.getElementById('results-body');
+    var examplesPath = './texts/';
 
     var allowedTypes = {
         'text/plain': true,
@@ -23,6 +24,7 @@
 
     var classUn = 'alert-warning';
     var classHi = 'alert-info';
+    var classErr = 'alert-danger';
     var classSuccess = 'alert-success';
     var messageDefault = "Drag and drop a text file here to analyze it.";
     var messageDrop = "Drop the file to begin.";
@@ -71,6 +73,49 @@
         return false;
     }
 
+    var loadRemoteFile = function(url, fileName) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open('GET', url, true);
+        xhttp.addEventListener("progress", loadProgress, false);
+        xhttp.addEventListener("load", loadSuccess, false);
+        xhttp.addEventListener("error", loadError, false);
+        xhttp.addEventListener("abort", loadError, false);
+        xhttp.send();
+    };
+
+    var loadProgress = function(oEvent) {
+      if (oEvent.lengthComputable) {
+        var percentComplete = 100 * (oEvent.loaded / oEvent.total);
+        setStatus(classHi, 'Loading ' + percentComplete.toFixed(0) + '% ...');
+      } else {
+        setStatus(classHi, 'Loading ...');
+      }
+    }
+
+    var loadError = function(oEvent) {
+        setStatus(classErr, 'There was an error.');
+        console.error(this);
+        console.error(oEvent);
+    }
+
+    var loadSuccess = function() {
+        var response = this;
+        if (response.status === 200) {
+            // Remove items
+            clearResultsAndFiles();
+
+            resultTabulator = new Tabulator(dictionary_whitelist);
+
+            var urlParts = response.responseURL.split('/');
+            var fileName = urlParts[urlParts.length-1];
+            var groupName = "A";
+            processText(response.responseText, fileName, groupName)
+        } else {
+            setStatus(classErr, 'There was an error: ' + response.status);
+        }
+    }
+
+    // Process a file that was dropped on the screen
     var processFile = function(e, files, file, groupName) {
         var success = true;
         if (allowedTypes[file.type] !== true) {
@@ -89,15 +134,28 @@
         }
 
         var kb = Math.ceil(file.size / 1024);
-        var text = (success ? '<b>+</b>' : '<b>-</b>') + ' ' + file.type + ' ' + file.name + ' ' + kb + ' kB';
+        var resultText = (success ? '<b>+</b>' : '<b>-</b>') + ' ' + file.type + ' ' + file.name + ' ' + kb + ' kB';
         var className = "group-"+groupName;
-        addFile(text, className);
+        addFile(resultText, className);
 
         var fileNumber = filesList.getElementsByTagName('div').length;
         if (files.length === fileNumber) {
             processDone();
         }
     };
+
+    // Process plain text that was loaded directly
+    var processText = function(text, fileName, groupName) {
+
+        resultTabulator.addText(text, fileName, groupName);
+
+        var kb = Math.ceil(text.length / 1024);
+        var resultText = '<b>+</b> ' + fileName + ' ' + kb + ' kB';
+        var className = "group-"+groupName;
+        addFile(resultText, className);
+
+        processDone();
+    }
 
     var processDone = function() {
         setStatus(classSuccess, 'Done loading. ' + messageDefault);
@@ -178,6 +236,13 @@
             obj['on' + evt] = handler;
         }
     }
+
+    // Initialize buttons
+    $('button').click(function(event) {
+        var fileName = this.getAttribute('data');
+        var url = examplesPath + fileName;
+        loadRemoteFile(url, fileName);
+    });
 
     // Start everything
     addEventHandler(window, 'load', initializeDropTarget);

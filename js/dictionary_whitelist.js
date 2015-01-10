@@ -1,4 +1,5 @@
 var dictionary_whitelist = {
+  "Gutenberg-tm":0,
   "sh":0,
   "iv":0,
   "ix":0,

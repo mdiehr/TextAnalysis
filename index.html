@@ -51,12 +51,30 @@
 	    <p class="lead">This tool scans through plain text files for proper nouns that occur, tabulating how many times they show up in the text. You can drop multiple text files into the area below.</p>
 	  </div>
 
-	  <div class="alert" id="status">
-	  	Drop your text files here.
+	  <div class="col-sm-8">
+	    <div class="alert" id="status">
+	      Drop your text files here.
+	    </div>
+	  </div>
+	  <div class="col-sm-4">
+	  	<div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Try an example text.</h3>
+            </div>
+            <div class="panel-body">
+				<button type="button" class="btn btn-sm btn-default" data="around_the_world_in_80_days.txt"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> Around the World in 80 Days by Jules Verne</button><br />
+				<button type="button" class="btn btn-sm btn-default" data="moby_dick.txt"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> Moby Dick; Or, The Whale by Herman Melville</button><br />
+				<button type="button" class="btn btn-sm btn-default" data="war_and_peace.txt"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> War and Peace by graf Leo Tolstoy</button><br />
+				<button type="button" class="btn btn-sm btn-default" data="pride_and_prejudice.txt"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> Pride and Prejudice by Jane Austen</button><br />
+				<button type="button" class="btn btn-sm btn-default" data="alice_in_wonderland.txt"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> Alice's Adventures in Wonderland by Lewis Carroll</button><br />
+				<button type="button" class="btn btn-sm btn-default" data="huckleberry_finn.txt"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> Adventures of Huckleberry Finn by Mark Twain</button><br />
+				<button type="button" class="btn btn-sm btn-default" data="tom_sawyer.txt"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> The Adventures of Tom Sawyer by Mark Twain</button><br />
+            </div>
+          </div>
 	  </div>
 	</div><!-- /.container -->
 	<div class="container">
-		<div class="col-sm-7" id="files-container" style="display:none;">
+		<div class="col-sm-6" id="files-container" style="display:none;">
 		  <div class="panel panel-default">
 		    <div class="panel-heading">
 		      <h3 class="panel-title">Files</h3>
@@ -64,7 +82,7 @@
 		    <div class="panel-body" id="files-body"></div>
 		  </div>
 		</div>
-		<div class="col-sm-5" id="results-container" style="display:none;">
+		<div class="col-sm-6" id="results-container" style="display:none;">
 		  <div class="panel panel-info">
 		    <div class="panel-heading">
 		      <h3 class="panel-title">Results</h3>
