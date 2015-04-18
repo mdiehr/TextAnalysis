@@ -14,6 +14,7 @@
     var filesList = document.getElementById('files-body');
     var resultsList = document.getElementById('results-body');
     var examplesPath = './texts/';
+    var _fileName = "";
 
     var allowedTypes = {
         'text/plain': true,
@@ -74,6 +75,7 @@
     }
 
     var loadRemoteFile = function(url, fileName) {
+        _fileName = fileName;
         var xhttp = new XMLHttpRequest();
         xhttp.open('GET', url, true);
         xhttp.addEventListener("progress", loadProgress, false);
@@ -106,10 +108,8 @@
 
             resultTabulator = new Tabulator(dictionary_whitelist);
 
-            var urlParts = response.responseURL.split('/');
-            var fileName = urlParts[urlParts.length-1];
             var groupName = "A";
-            processText(response.responseText, fileName, groupName)
+            processText(response.responseText, _fileName, groupName)
         } else {
             setStatus(classErr, 'There was an error: ' + response.status);
         }
@@ -146,7 +146,6 @@
 
     // Process plain text that was loaded directly
     var processText = function(text, fileName, groupName) {
-
         resultTabulator.addText(text, fileName, groupName);
 
         var kb = Math.ceil(text.length / 1024);
